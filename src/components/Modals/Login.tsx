@@ -36,14 +36,14 @@ const Login: React.FC<LoginProps> = () => {
             const user = await signInWithEmailAndPassword(inputs.email, inputs.password);
             if (!user) return;
             await router.push('/');
-            toast.success(`Welcome ${user.user.email}`, { position: "top-right", autoClose: 3000, theme: "dark" })
+            toast.success(`Welcome ${user.user.email}`, { position: "top-left", autoClose: 1000, theme: "dark" })
         } catch (error: any) {
             toast.error(error.message, { position: "top-center", autoClose: 3000, theme: "dark" });
         }
     };
 
     useEffect(() => {
-        if (error) toast.error(error.message, {position: "top-center", autoClose: 3000, theme: "dark"});
+        if (error) toast.error(error.message, {position: "top-center", autoClose: 1000, theme: "dark"});
     }, [error])
     
 

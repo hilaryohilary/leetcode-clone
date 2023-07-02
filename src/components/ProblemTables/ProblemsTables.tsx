@@ -1,15 +1,19 @@
-import { problems } from '@/mockProblems/problems';
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
+import React, { SetStateAction, useEffect, useState } from 'react';
 import { BsCheckCircle } from 'react-icons/bs';
 import { AiFillYoutube } from 'react-icons/ai'
 import { IoClose } from 'react-icons/io5';
 import YouTube from 'react-youtube';
-type ProblemsTablesProps = {
+import { collection, getDocs, orderBy, query } from 'firebase/firestore';
+import { firestore } from '@/firebase/firebase';
+import { DBProblem } from '@/utils/types/problem';
+import useSolvedProblems from '@/hooks/useSolvedProblems';
 
+type ProblemsTablesProps = {
+    setLoadingProblems: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const ProblemsTables: React.FC<ProblemsTablesProps> = () => {
+const ProblemsTables: React.FC<ProblemsTablesProps> = ({setLoadingProblems}) => {
     const [youtubePlayer, setYoutubePlayer] = useState({
         isOpen: false,
         videoId: ''
@@ -34,6 +38,9 @@ const ProblemsTables: React.FC<ProblemsTablesProps> = () => {
       }
     }, [])
     
+    const problems = useGetProblems(setLoadingProblems);
+    const solvedProblems = useSolvedProblems();
+    console.log(solvedProblems);
     return (
         <>
             <tbody className='text-white'>
@@ -43,12 +50,20 @@ const ProblemsTables: React.FC<ProblemsTablesProps> = () => {
                     return (
                         <tr className={`${idx % 2 == 1 ? 'bg-dark-layer-1' : ''}`} key={doc.id}>
                             <th className="px-2 py-4 font-medium whitespace-nowrap text-dark-green-s">
-                                <BsCheckCircle fontSize={"28"} width="18" />
+                                {
+                                    solvedProblems.includes(doc.id) &&
+                                    <BsCheckCircle fontSize={"28"} width="18" />
+                                }
                             </th>
                             <td className='px-6 py-4'>
-                                <Link className="hover:text-blue-600 cursor-pointer" href={`/problems/${doc.id}`}>
-                                    {doc.title}
-                                </Link>
+                                {doc.link === "" ? (
+                                    <Link className="hover:text-blue-600 cursor-pointer" href={`/problems/${doc.id}`}>
+                                        {doc.title}
+                                    </Link>
+                                ) : (
+                                        <Link className="hover:text-blue-600 cursor-pointer" href={doc.link as string} target='__blank'> { doc.title}
+                                        </Link>
+                                )}
                             </td>
                             <td className={`px-6 py-4 ${difficultyColor}`}>
                                 {doc.difficulty}
@@ -83,3 +98,23 @@ const ProblemsTables: React.FC<ProblemsTablesProps> = () => {
     )
 }
 export default ProblemsTables;
+
+function useGetProblems(setLoadingProblems: React.Dispatch<SetStateAction<boolean>>) {
+    const [problems, setproblems] = useState<DBProblem[]>([]);
+    useEffect(() => {
+        const getProblems = async () => {
+            setLoadingProblems(true);
+            const q = query(collection(firestore, "problems"), orderBy("order", "asc"));
+            const querySnapshot = await getDocs(q);
+            const tmp:DBProblem[] = [];
+            querySnapshot.forEach((doc) => {
+                tmp.push({id: doc.id, ...doc.data()} as DBProblem)
+            })
+            setproblems(tmp);
+            setLoadingProblems(false);
+        }
+        getProblems();
+    }, []);
+    
+    return problems;
+}
