@@ -11,7 +11,7 @@ import { BsList } from 'react-icons/bs';
 import { useRouter } from 'next/router';
 import { problems } from '@/utils/problems';
 import { Problem } from '@/utils/types/problem';
-import Timer from '../Timer/Timer';
+import Timer from '../timer/Timer';
 
 
 type TopbarProps = {
