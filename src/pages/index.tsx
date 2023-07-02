@@ -78,7 +78,7 @@ export default function Home() {
         <title>LeetCodeClone</title>
         <meta name="description" content="LeetCode clone by Hilary.O.Hilary" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.png" />
       </Head>
       <main className='bg-dark-layer-2 min-h-screen'>
         <Topbar />
