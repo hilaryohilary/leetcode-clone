@@ -8,10 +8,11 @@ import { authModalState } from '@/atoms/authModalAtom';
 import { useSetRecoilState } from 'recoil';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { BsList } from 'react-icons/bs';
-import Timer from '../Timer/timer'
 import { useRouter } from 'next/router';
 import { problems } from '@/utils/problems';
 import { Problem } from '@/utils/types/problem';
+import Timer from '../Timer/Timer';
+
 
 type TopbarProps = {
     problemPage?: boolean;

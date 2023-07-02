@@ -5,7 +5,7 @@ type timerProps = {
 
 };
 
-const timer: React.FC<timerProps> = () => {
+const Timer: React.FC<timerProps> = () => {
     const [showTimer, setShowTimer] = useState<boolean>(false);
 
     const [time, setTime] = useState<number>(0);
@@ -39,12 +39,12 @@ const timer: React.FC<timerProps> = () => {
         {showTimer ? (
             <div className='flex items-center space-x-2 border-dark-fill-3 p-1.5 cursor-pointer rounded hover:bg-dark-fill-2'>
                 <div>
-                    { formatTime(time)}
+                    {formatTime(time)}
                 </div>
                 <FiRefreshCcw onClick={() => {
                     setShowTimer(false);
                     setTime(0);
-                }}/>
+                }} />
             </div>
         ) : (
             <div className='flex items-center p-1 h-8 hover:bg-dark-fill-3 rounded cursor-pointer' onClick={handleClockClick}>
@@ -66,4 +66,4 @@ const timer: React.FC<timerProps> = () => {
         )}
     </div>
 }
-export default timer;
+export default Timer;
